@@ -10,9 +10,17 @@ use Illuminate\Http\Request;
 class BookController extends Controller
 {
     // THis method Will Show Book Listing
-    public function index()
+    public function index(Request $request)
     {
-        return view('Books.list');
+        $books = Book::orderBy('created_at','DESC');
+        if(!empty($request->keyword))
+        {
+            $books->where('title','like','%'.$request->keyword.'%');
+        }
+        $books = $books->paginate(3);
+        return view('Books.list',[
+            'books'=>$books
+        ]);
     }
 
     // This method will create a book list

@@ -35,6 +35,9 @@ Route::prefix('account')->group(function () {
         Route::get('book',[BookController::class,'index'])->name('book.index');
         Route::get('book/create',[BookController::class,'create'])->name('book.create');
         Route::post('book/store',[BookController::class,'store'])->name('book.store');
+        Route::get('book/edit/{id}',[BookController::class,'edit'])->name('book.edit');
+        Route::post('book/edit/{id}',[BookController::class,'update'])->name('book.update');
+        Route::delete('book',[BookController::class,'destroy'])->name('book.destroy');
     });
 });
 

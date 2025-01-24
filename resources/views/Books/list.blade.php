@@ -73,15 +73,15 @@
                                             </td>
                                             <td>
                                                 <a href="#" class="btn btn-success btn-sm"><i class="fa-regular fa-star"></i></a>
-                                                <a href="edit-book.html" class="btn btn-primary btn-sm"><i class="fa-regular fa-pen-to-square"></i>
+                                                <a href="{{route('book.edit',$book->id)}}" class="btn btn-primary btn-sm"><i class="fa-regular fa-pen-to-square"></i>
                                                 </a>
-                                                <a href="" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                                <a href="#" class="btn btn-danger btn-sm" onclick="deleteBook({{$book->id}});"><i class="fa-solid fa-trash"></i></a>
                                             </td>
                                         </tr>
                                     @endforeach
                                     @else
                                     <tr>
-                                        <td colspan="5">
+                                        <td colspan="5" class="text-center">
                                             Books not found
                                         </td>
                                     </tr>
@@ -98,4 +98,25 @@
         </div>
     </div>       
 </div>
+@endsection
+
+@section('script')
+<script>
+    function deleteBook(id)
+    {
+        if(confirm('Are You Sure Want to Delete This Data ?')){
+            $.ajax({
+                url:'{{route('book.destroy')}}',
+                type:'delete',
+                data:{id:id},
+                headers:{
+                    'X-CSRF-TOKEN' : '{{csrf_token()}}'
+                },
+                success:function(response){
+                    window.location.href = '{{route('book.index')}}';
+                }
+            });
+        }
+    }
+</script>
 @endsection

@@ -4,11 +4,11 @@ use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\HomeController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
 
+Route::get('/',[HomeController::class,'index'])->name('home');
+Route::get('/book/{id}',[HomeController::class,'details'])->name('book.detail');
 
 
 
@@ -38,6 +38,8 @@ Route::prefix('account')->group(function () {
         Route::get('book/edit/{id}',[BookController::class,'edit'])->name('book.edit');
         Route::post('book/edit/{id}',[BookController::class,'update'])->name('book.update');
         Route::delete('book',[BookController::class,'destroy'])->name('book.destroy');
+
+        
     });
 });
 

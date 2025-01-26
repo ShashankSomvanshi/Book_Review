@@ -83,9 +83,7 @@ class BookController extends Controller
     public function edit($id)
     {
         $books = Book::findOrFail($id);
-        return view('Books.edit',[
-            'books'=>$books
-        ]);
+        return view('Books.edit',compact('books'));
     }
 
     // This Method is use for Update Book Detailes

@@ -28,7 +28,10 @@ class HomeController extends Controller
     // This Method Will show book details Page
     public function details($id)
     {
-        $book = Book::findOrFail($id);
+        $book = Book::with(['reviews.user','reviews'=> function($query){
+            $query->where('status',1);
+        }])->findOrFail($id);
+        // dd($book);
 
         $relatedBook = Book::where('status',1)->take(3)->where('id','!=',$id)->inRandomOrder()->get();
 

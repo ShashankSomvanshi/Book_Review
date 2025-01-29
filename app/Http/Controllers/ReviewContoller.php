@@ -14,7 +14,7 @@ class ReviewContoller extends Controller
         if(!empty($request->keyword)){
             $reviews = $reviews->where('review','like','%'.$request->keyword.'%');
         }
-        $reviews = $reviews->paginate(1);
+        $reviews = $reviews->paginate(3);
         return view('account.reviews.list',compact('reviews'));
     }
 

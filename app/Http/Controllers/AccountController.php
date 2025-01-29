@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\File;
 use Intervention\Image\ImageManager;
 use Intervention\Image\Drivers\Imagick\Driver;
 use Intervention\Image\Facades\Image;
+use App\Models\Review;
 
 class AccountController extends Controller
 {
@@ -135,5 +136,50 @@ class AccountController extends Controller
         }
         
         return redirect()->route('account.profile')->with('success','User Details have Successfully Update!!!');
+    }
+
+    public function myReviews(Request $request){
+
+        $reviews = Review::with('book')->where('user_id',Auth::user()->id);
+        $reviews = $reviews->orderBy('created_at','DESC');
+
+        if(!empty($request->keyword)){
+            $reviews = $reviews->where('review','like','%'.$request->keyword.'%');
+        }
+        $reviews = $reviews->paginate(3);
+        return view('account.myreviews.myreviews',compact('reviews'));
+    }
+
+    public function editReviews($id){
+        $review =Review::where([
+            'id'=>$id,
+            'user_id'=>Auth::user()->id
+
+        ])->with('book')->first();
+
+        return view('account.myreviews.editreviews',compact('review'));
+    }
+
+    public function updateMyReview($id,Request $request){
+
+        $review = Review::findOrFail($id);
+
+        $rules = [
+            'review' => 'required|min:10',
+            'rating'=>'required'
+        ];
+
+        $validator = Validator::make($request->all(),$rules);
+
+        if($validator->fails()){
+            return redirect()->route('account.reviews.edit',$id)->withInput()->withErrors($validator);
+        }
+
+        $review->review = $request->review;
+        $review->rating = $request->rating;
+        $review->save();
+
+        Session()->flash('success','Review Updated Successgully!!');
+        return redirect()->route('account.myReviews');
     }
 }

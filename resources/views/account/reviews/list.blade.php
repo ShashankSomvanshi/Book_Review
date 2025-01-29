@@ -51,12 +51,12 @@
                                         <td>
                                             <a href="{{route('account.reviews.edit',$review->id)}}" class="btn btn-primary btn-sm"><i class="fa-regular fa-pen-to-square"></i>
                                             </a>
-                                            <a href="#" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
+                                            <a href="#" onclick="deleteReview({{$review->id}})" class="btn btn-danger btn-sm"><i class="fa-solid fa-trash"></i></a>
                                         </td>
                                     </tr>
                                     @endforeach
                                 @else
-                                    
+                                    <p class="text-center">No Review Found</p>
                                 @endif                                  
                             </tbody>
                         </thead>
@@ -68,4 +68,26 @@
         </div>
     </div>       
 </div>
+@endsection
+
+@section('script')
+    <script>
+        function deleteReview(id){
+
+            if(confirm('Are you Sure You Want to Delete ?')){
+                $.ajax({
+                    url:"{{route('account.reviews.deleteReview')}}",
+                    data:{id:id},
+                    type:'POST',
+                    headers:{
+                        'X-CSRF-TOKEN':'{{csrf_token()}}'
+                    },
+                    success:function(response){
+                        window.location.href = "{{route('account.reviews.list')}}";
+                    }
+                })
+            }
+
+        }
+    </script>
 @endsection

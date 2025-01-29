@@ -47,4 +47,23 @@ class ReviewContoller extends Controller
         Session()->flash('success','Review Updated Successgully!!');
         return redirect()->route('account.reviews.list');
     }
+
+    public function deleteReview(Request $request){
+
+        $id = $request->id;
+        $review = Review::find($id);
+
+        if($review == null){
+            session()->flash('error','Review Not Found');
+            return response()->json([
+                'status'=>false
+            ]);
+        }else{
+            $review->delete();
+            session()->flash('success','Review Deleted Successfully');
+            return response()->json([
+                'status'=>true
+            ]);
+        }
+    }
 }

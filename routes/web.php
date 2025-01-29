@@ -41,9 +41,10 @@ Route::prefix('account')->group(function () {
         Route::post('book/edit/{id}',[BookController::class,'update'])->name('book.update');
         Route::delete('book',[BookController::class,'destroy'])->name('book.destroy');
 
-        Route::get('reviews',[ReviewContoller::class,'index'])->name('account.reviews.list');
+        Route::get('/reviews',[ReviewContoller::class,'index'])->name('account.reviews.list');
         Route::get('reviews/{id}',[ReviewContoller::class,'edit'])->name('account.reviews.edit');
         Route::post('reviews/{id}',[ReviewContoller::class,'updateReview'])->name('account.reviews.updateReview');
+        Route::post('deleteReview',[ReviewContoller::class,'deleteReview'])->name('account.reviews.deleteReview');
         
     });
 });

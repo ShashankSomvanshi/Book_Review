@@ -40,8 +40,16 @@
                         <div class="card-body">
                             <h3 class="h4 heading"><a href="#">{{$books->title}}</a></h3>
                             <p>by {{$books->author}}</p>
+                            @php
+                                if($books->review_count > 0){
+                                    $avgRating = $books->reviews_sum_rating/$books->reviews_count;
+                                }else{
+                                    $avgRating = 0;
+                                }
+                                $avgRatingPer = ($avgRating * 100)/5;
+                            @endphp
                             <div class="star-rating d-inline-flex ml-2" title="">
-                                <span class="rating-text theme-font theme-yellow">5.0</span>
+                                <span class="rating-text theme-font theme-yellow">{{number_format($avgRating,1)}}</span>
                                 <div class="star-rating d-inline-flex mx-2" title="">
                                     <div class="back-stars ">
                                         <i class="fa fa-star " aria-hidden="true"></i>
@@ -50,7 +58,7 @@
                                         <i class="fa fa-star" aria-hidden="true"></i>
                                         <i class="fa fa-star" aria-hidden="true"></i>
     
-                                        <div class="front-stars" style="width: 100%">
+                                        <div class="front-stars" style="{{$avgRatingPer}}">
                                             <i class="fa fa-star" aria-hidden="true"></i>
                                             <i class="fa fa-star" aria-hidden="true"></i>
                                             <i class="fa fa-star" aria-hidden="true"></i>
@@ -59,7 +67,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <span class="theme-font text-muted">(2 Reviews)</span>
+                                <span class="theme-font text-muted">({{($books->reviews_count > 1) ? $books->reviews_count . 'Reviews' : $books->reviews_count .'Review' }} )</span>
                             </div>
                         </div>
                     </div>

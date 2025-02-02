@@ -12,14 +12,16 @@ class HomeController extends Controller
 {
     public function index(Request $request)
     {
-        $book = Book::orderBy('created_at','DESC');
+        $book = Book::withCount('reviews')->withSum('reviews','rating')->orderBy('created_at','DESC');
 
         if(!empty($request->keyword)){
             $book->where('title','like','%'.$request->keyword.'%');
         }
 
-        $book = $book->where('status',1)->paginate(4);
         
+
+        $book = $book->where('status',1)->paginate(4);
+
         // dd($book);
         
         return view('home',compact('book'));

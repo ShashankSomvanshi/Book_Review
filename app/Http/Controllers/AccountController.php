@@ -182,4 +182,64 @@ class AccountController extends Controller
         Session()->flash('success','Review Updated Successgully!!');
         return redirect()->route('account.myReviews');
     }
+
+    public function deleteMyReview(Request $request){
+        $id = $request->id;
+
+        $review = Review::find($id);
+
+        if($review == null){
+            return response()->json([
+                'status'=>false
+            ]);
+        }
+
+        $review->delete();
+
+        session()->flash('success','Review Deleted Successfully');
+
+        return response()->json([
+            'status'=>true,
+            'message'=>'Review Delete Successfully'
+        ]);
+
+    }
+
+    public function changePassword(){
+        $user = User::find(Auth::user()->id);
+        // dd($user);
+        return view('account.changepassword',compact('user'));
+    }
+
+    public function PasswordChangeRequest($id,Request $request){
+
+        $id = $request->id;
+
+        $user = User::find($id);
+
+        if(!$user){
+            return redirect()->route('account.changePassword')->with('error','User not Found');
+        }
+        
+        $rules = [
+            'old_password' => 'required',
+            'password'=>'required|confirmed|min:3',
+            'password_confirmation'=>'required' 
+        ];
+
+        if (!Hash::check($request->old_password, $user->password)) {
+            return redirect()->route('account.profile')->with('error','Check the Old Pssword');
+        }
+
+        $validator = Validator::make($request->all(),$rules);
+
+        if($validator->fails()){
+            return redirect()->route('account.changePassword')->withInput()->withErrors($validator);
+        }
+
+        $user->password = Hash::make($request->password); 
+        $user->save();
+
+        return redirect()->route('account.profile')->with('success','Password Update Successfully');
+    }
 }
